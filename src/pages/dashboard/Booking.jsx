@@ -1,6 +1,7 @@
 import { useState } from "react";
 import AllBooking from "../../components/booking/AllBooking";
 import Unconfirmed from "../../components/booking/Unconfirmed.jsx";
+import Confirmed from "../../components/booking/Confirmed.jsx";
 
 export default function Booking() {
   const [activeTab, setActiveTab] = useState("All");
@@ -46,23 +47,22 @@ export default function Booking() {
               <p className="text-sm text-gray-600 mt-2">
                 Unconfirmed bookings will be displayed here.
               </p>
-              <p className="text-lg font-semibold text-yellow-700">
+              <div className="text-lg font-semibold text-yellow-700">
                 <Unconfirmed />
-              </p>
+              </div>
             </div>
           </div>
         )}
 
         {/* Confirmed Bookings */}
         {activeTab === "Confirmed" && (
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="flex">
             <div className="p-6 bg-green-50 border border-green-200 rounded-lg shadow-sm">
               <p className="text-lg font-semibold text-green-700">
-                Confirmed Bookings
-              </p>
-              <p className="text-sm text-gray-600 mt-2">
                 Confirmed bookings will be displayed here.
               </p>
+              <div className="text-sm text-gray-600 mt-2"></div>
+              <Confirmed />
             </div>
           </div>
         )}

@@ -3,7 +3,7 @@ import { FaGoogle, FaFacebookF, FaGithub } from "react-icons/fa";
 import Logo from "../../assets/logo.jpg";
 import toast from "react-hot-toast";
 import { login } from "../../service/apiService.js";
-import useUserStore from "../../components/zustand/userStore.js";
+import { useUserStore } from "../../components/zustand/userStore.js";
 import { useNavigate } from "react-router";
 
 export default function Login() {

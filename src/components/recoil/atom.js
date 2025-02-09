@@ -22,9 +22,13 @@ const tempTimetableState = atom({
 
 const allBookingState = atom({
   key: "allBookingState",
-  default:[],
-
+  default: [],
 });
 
-
-export { expandedState, activeState, timetableState, tempTimetableState,allBookingState };
+export {
+  expandedState,
+  activeState,
+  timetableState,
+  tempTimetableState,
+  allBookingState,
+};

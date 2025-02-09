@@ -1,6 +1,24 @@
 import Apiclient from "./apiClient"; // Import the reusable Axios client
 import authHeader from "./authHeader";
-const API_URL = "api/booking/"; // Relative path for auth-related endpoints
+const API_URL = "/api/realtime/seats"; // Relative path for auth-related endpoints
+
+//fetch all the reserved seats.
+const getAllReservedSeats = async (busId) => {
+  try {
+    const response = await Apiclient.get(
+      API_URL + `/get-all-reservedseats/${busId}`,
+      {
+        headers: authHeader(), // Include the authorization header
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error during fetching bookings:", error);
+    const errorMessage =
+      error.response?.data?.message || "fetching data failed. Try again.";
+    throw new Error(errorMessage);
+  }
+};
 
 // add to my booking
 const addToBooking = async (userId, busId, isConfirmed) => {
@@ -26,35 +44,24 @@ const addToBooking = async (userId, busId, isConfirmed) => {
 };
 
 // Confirm Booking
-const confirmBooking = async (
-  userId,
-  busId,
-  bookingId,
-  numberOfSeats,
-  selectedSeats,
-  date
-) => {
+const confirmBooking = async (username, email, password) => {
   try {
-    const seats = JSON.stringify(selectedSeats);
-    const response = await Apiclient.post(
-      API_URL + "confirmBooking",
-      {
-        userId,
-        busId,
-        bookingId,
-        numberOfSeats,
-        seats,
-        date,
-      },
-      {
-        headers: authHeader(), // Include the authorization header
-      }
-    );
-    return response.data;
+    const response = await Apiclient.post(API_URL + "login", {
+      username,
+      email,
+      password,
+    });
+
+    if (response.data.token) {
+      // Store user data (including token) in localStorage
+      localStorage.setItem("user", JSON.stringify(response.data));
+    }
+
+    return response.data; // Return the server response
   } catch (error) {
-    console.error("Error details:", error.response?.data || error.message);
     const errorMessage =
-      error.response?.data?.message || "Registration failed. Try again.";
+      error.response?.data?.message ||
+      "An error occurred during login. try again";
     throw new Error(errorMessage);
   }
 };
@@ -93,4 +100,10 @@ const getAllBookings = async (userId) => {
   }
 };
 
-export { addToBooking, confirmBooking, getAllBookings, getOneBooking };
+export {
+  getAllReservedSeats,
+  addToBooking,
+  confirmBooking,
+  getAllBookings,
+  getOneBooking,
+};

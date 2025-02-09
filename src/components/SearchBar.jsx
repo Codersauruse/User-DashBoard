@@ -2,17 +2,27 @@ import { useRecoilState } from "recoil";
 import { tempTimetableState, timetableState } from "./recoil/atom";
 import { useEffect, useState } from "react";
 import { getAllBuses } from "../service/busService";
+import { useDateStore } from "./zustand/userStore";
+import DatePicker from "react-datepicker"; // Import React Date Picker
+import "react-datepicker/dist/react-datepicker.css"; // Import default styles
+import { format } from "date-fns";
 
 export default function SearchBar() {
   const [location, setLocation] = useState("");
   const [timetable, setTimeTable] = useRecoilState(timetableState);
   const [filteredTimetable, setFilteredTimetable] = useState([]);
   const [tempTimeTable, setTempTimeTable] = useRecoilState(tempTimetableState);
-
+  const date = useDateStore((state) => state.date);
+  const setDate = useDateStore((state) => state.setDate);
   useEffect(() => {
     async function initialize() {
       try {
-        const response = await getAllBuses(""); // Fetch buses (all or filtered)
+        const selectedDate = date
+          ? format(date, "yyyy-MM-dd")
+          : format(new Date(), "yyyy-MM-dd");
+        console.log(selectedDate);
+        setDate(selectedDate);
+        const response = await getAllBuses("", selectedDate); // Fetch buses (all or filtered)
         setTimeTable(response); // Assuming the response is already data
         console.log(response);
         if (tempTimeTable.length === 0) {
@@ -24,7 +34,7 @@ export default function SearchBar() {
     }
 
     initialize(); // Invoke the function
-  }, []); // Dependency array ensures this runs only once after the component mounts
+  }, [date]); // Dependency array ensures this runs only once after the component mounts
 
   const handleChange = (event) => {
     setLocation(event.target.value);
@@ -72,9 +82,16 @@ export default function SearchBar() {
               type="text"
               name="searchbar"
               className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
-              placeholder="Search by location"
+              placeholder="Search by location and date"
               value={location}
               onChange={handleChange}
+            />
+            <DatePicker
+              selected={date}
+              onChange={(date) => setDate(date)}
+              dateFormat="yyyy-MM-dd"
+              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              placeholderText="Select date"
             />
             <button
               type="button"

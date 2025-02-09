@@ -23,7 +23,7 @@ export default function Timetable() {
     };
 
     checkTime();
-  });
+  }, );
 
   return (
     <div className="container mx-auto p-6">

@@ -6,5 +6,12 @@ const useUserStore = create((set) => ({
   login: (userData) => set({ user: userData }), // Set user data on login
   logout: () => set({ user: null }), // Clear user data on logout
 }));
+//the date which is used to watch timetable and reserving seats and doing payment.
 
-export default useUserStore;
+const useDateStore = create((set) => ({
+  date: "",
+  setDate: (date) => set({ date: date }),
+  clearDate: () => set({ date: "" }),
+}));
+
+export { useUserStore, useDateStore };

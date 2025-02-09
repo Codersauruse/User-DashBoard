@@ -2,11 +2,11 @@ import Apiclient from "./apiClient"; // Import the reusable Axios client
 import authHeader from "./authHeader";
 const API_URL = "api/bus/";
 
-const getAllBuses = async (destination) => {
+const getAllBuses = async (destination,date) => {
   try {
-    const response = await Apiclient.get(API_URL + "/get-all-buses", {
+    const response = await Apiclient.get(API_URL + "realtime/get-all-buses", {
       headers: authHeader(), // Include the authorization header
-      params: { destination }, // Pass destination as a query parameter
+      params: { destination,date }, // Pass destination as a query parameter
     });
     return response.data;
   } catch (error) {
@@ -17,22 +17,18 @@ const getAllBuses = async (destination) => {
   }
 };
 
-
 const getBus = async (busId) => {
   try {
     const response = await Apiclient.get(API_URL + `getBus/${busId}`, {
       headers: authHeader(), // Include the authorization header
     });
     return response.data;
-    
-   } catch (error) {
+  } catch (error) {
     console.error("Error during fetching bookings:", error);
     const errorMessage =
       error.response?.data?.message || "fetching data failed. Try again.";
     throw new Error(errorMessage);
-   }
+  }
+};
 
-
- };
-
-export { getAllBuses ,getBus};
+export { getAllBuses, getBus };
